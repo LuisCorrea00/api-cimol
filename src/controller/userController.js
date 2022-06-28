@@ -1,4 +1,3 @@
-const req = require("express/lib/request");
 const userModel=require("../model/userModel");
 
 exports.get= async (headers)=>{
