@@ -28,7 +28,6 @@ router.post('/curso', async(req, res, next)=>{
 })
 
 router.put('/curso/:idCurso', async(req, res, next)=>{
-  console.log(req);
   resp=await cursoController.put (req.headers, req.body, req.params.idCurso );
   res.status(200).send(resp);
 })
