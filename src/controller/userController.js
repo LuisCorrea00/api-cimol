@@ -1,7 +1,7 @@
 const userModel=require("../model/userModel");
 
 exports.get= async (headers)=>{
-  auth=userModel.verifyJWT(headers['x-access-token']);
+  auth=await userModel.verifyJWT(headers['x-access-token'],headers.perfil);
   users={};
   if(auth.idUser){
     if(headers.iduser==auth.idUser){

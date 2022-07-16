@@ -18,7 +18,7 @@ post= async (data)=>{
   return resp;
 }
 
-put= async (data)=>{
+put= async (data, idCurso)=>{
   sql="INSERT INTO curso"+
   " ( set";
   if(data.nome){
