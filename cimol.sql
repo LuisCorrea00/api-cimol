@@ -1,268 +1,268 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 25-Jun-2022 às 20:34
--- Versão do servidor: 10.4.22-MariaDB
--- versão do PHP: 7.4.27
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- -----------------------------------------------------
+-- Schema cimol
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema cimol
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `cimol` DEFAULT CHARACTER SET utf8 ;
+USE `cimol` ;
+
+-- -----------------------------------------------------
+-- Table `cimol`.`pessoa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`pessoa` (
+  `id_pessoa` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`id_pessoa`),
+  UNIQUE INDEX `id_pessoa_UNIQUE` (`id_pessoa` ASC) )
+ENGINE = InnoDB;
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- -----------------------------------------------------
+-- Table `cimol`.`professor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`professor` (
+  `pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`pessoa_id_pessoa`),
+  CONSTRAINT `fk_professor_pessoa`
+    FOREIGN KEY (`pessoa_id_pessoa`)
+    REFERENCES `cimol`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
---
--- Banco de dados: `cimol`
---
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `cimol`.`aluno`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`aluno` (
+  `pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  `matricula` INT NOT NULL,
+  PRIMARY KEY (`pessoa_id_pessoa`),
+  CONSTRAINT `fk_aluno_pessoa1`
+    FOREIGN KEY (`pessoa_id_pessoa`)
+    REFERENCES `cimol`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
---
--- Estrutura da tabela `administrador`
---
 
-CREATE TABLE `administrador` (
-  `pessoa_id_pessoa` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- -----------------------------------------------------
+-- Table `cimol`.`curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`curso` (
+  `id_curso` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `numero` VARCHAR(45) NOT NULL,
+  `logo` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_curso`),
+  UNIQUE INDEX `id_curso_UNIQUE` (`id_curso` ASC) )
+ENGINE = InnoDB;
 
---
--- Extraindo dados da tabela `administrador`
---
 
-INSERT INTO `administrador` (`pessoa_id_pessoa`) VALUES
-(3);
+-- -----------------------------------------------------
+-- Table `cimol`.`coordenacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`coordenacao` (
+  `professor_pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  `curso_id_curso` INT UNSIGNED NOT NULL,
+  `data_inicio` DATE NOT NULL,
+  `data_fim` DATE NOT NULL,
+  `ativo` ENUM('S', 'N') NOT NULL DEFAULT 'S',
+  PRIMARY KEY (`professor_pessoa_id_pessoa`, `curso_id_curso`),
+  INDEX `fk_professor_has_curso_curso1_idx` (`curso_id_curso` ASC) ,
+  INDEX `fk_professor_has_curso_professor1_idx` (`professor_pessoa_id_pessoa` ASC) ,
+  CONSTRAINT `fk_professor_has_curso_professor1`
+    FOREIGN KEY (`professor_pessoa_id_pessoa`)
+    REFERENCES `cimol`.`professor` (`pessoa_id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_professor_has_curso_curso1`
+    FOREIGN KEY (`curso_id_curso`)
+    REFERENCES `cimol`.`curso` (`id_curso`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `aluno`
---
+-- -----------------------------------------------------
+-- Table `cimol`.`aluno_curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`aluno_curso` (
+  `aluno_pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  `curso_id_curso` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`aluno_pessoa_id_pessoa`, `curso_id_curso`),
+  INDEX `fk_aluno_has_curso_curso1_idx` (`curso_id_curso` ASC) ,
+  INDEX `fk_aluno_has_curso_aluno1_idx` (`aluno_pessoa_id_pessoa` ASC) ,
+  CONSTRAINT `fk_aluno_has_curso_aluno1`
+    FOREIGN KEY (`aluno_pessoa_id_pessoa`)
+    REFERENCES `cimol`.`aluno` (`pessoa_id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_aluno_has_curso_curso1`
+    FOREIGN KEY (`curso_id_curso`)
+    REFERENCES `cimol`.`curso` (`id_curso`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
-CREATE TABLE `aluno` (
-  `pessoa_id_pessoa` int(10) UNSIGNED NOT NULL,
-  `matricula` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `cimol`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`usuario` (
+  `senha` VARCHAR(60) NOT NULL,
+  `token` VARCHAR(120) NULL,
+  `pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  INDEX `fk_usuario_pessoa1_idx` (`pessoa_id_pessoa` ASC) ,
+  CONSTRAINT `fk_usuario_pessoa1`
+    FOREIGN KEY (`pessoa_id_pessoa`)
+    REFERENCES `cimol`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
---
--- Estrutura da tabela `aluno_curso`
---
 
-CREATE TABLE `aluno_curso` (
-  `aluno_pessoa_id_pessoa` int(10) UNSIGNED NOT NULL,
-  `curso_id_curso` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- -----------------------------------------------------
+-- Table `cimol`.`administrador`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`administrador` (
+  `pessoa_id_pessoa` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`pessoa_id_pessoa`),
+  CONSTRAINT `fk_administrador_pessoa1`
+    FOREIGN KEY (`pessoa_id_pessoa`)
+    REFERENCES `cimol`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `coordenacao`
---
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_tipo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_tipo` (
+  `id_tipo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id_tipo`),
+  UNIQUE INDEX `id_tipo_UNIQUE` (`id_tipo` ASC) )
+ENGINE = InnoDB;
 
-CREATE TABLE `coordenacao` (
-  `professor_pessoa_id_pessoa` int(10) UNSIGNED NOT NULL,
-  `curso_id_curso` int(10) UNSIGNED NOT NULL,
-  `data_inicio` date DEFAULT NULL,
-  `data_fim` date DEFAULT NULL,
-  `ativo` enum('S','N') DEFAULT 'S'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_editora`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_editora` (
+  `id_editora` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id_editora`),
+  UNIQUE INDEX `id_editora_UNIQUE` (`id_editora` ASC) )
+ENGINE = InnoDB;
 
---
--- Estrutura da tabela `curso`
---
 
-CREATE TABLE `curso` (
-  `id_curso` int(10) UNSIGNED NOT NULL,
-  `nome` varchar(45) NOT NULL,
-  `numero` varchar(45) NOT NULL,
-  `logo` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_obra`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_obra` (
+  `id_obra` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `img` VARCHAR(255) NOT NULL,
+  `titulo` VARCHAR(255) NOT NULL,
+  `isbn` INT(13) NOT NULL,
+  `sinopse` LONGTEXT NOT NULL,
+  `n_paginas` INT NOT NULL,
+  `n_edicao` INT NOT NULL,
+  `data_retirada` DATE NULL,
+  `data_devolucao` DATE NULL,
+  `tipo_id_tipo` INT UNSIGNED NOT NULL,
+  `editora_id_editora` INT UNSIGNED NOT NULL,
+  `pessoa_id_pessoa` INT UNSIGNED NULL,
+  `situacao` ENUM('disponivel', 'indisponivel') NOT NULL,
+  PRIMARY KEY (`id_obra`, `tipo_id_tipo`, `editora_id_editora`, `pessoa_id_pessoa`),
+  INDEX `fk_obra_tipo1_idx` (`tipo_id_tipo` ASC) ,
+  INDEX `fk_biblio_obra_biblio_editora1_idx` (`editora_id_editora` ASC) ,
+  INDEX `fk_biblio_obra_pessoa1_idx` (`pessoa_id_pessoa` ASC) ,
+  UNIQUE INDEX `id_obra_UNIQUE` (`id_obra` ASC) ,
+  CONSTRAINT `fk_obra_tipo1`
+    FOREIGN KEY (`tipo_id_tipo`)
+    REFERENCES `cimol`.`biblio_tipo` (`id_tipo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_biblio_obra_biblio_editora1`
+    FOREIGN KEY (`editora_id_editora`)
+    REFERENCES `cimol`.`biblio_editora` (`id_editora`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_biblio_obra_pessoa1`
+    FOREIGN KEY (`pessoa_id_pessoa`)
+    REFERENCES `cimol`.`pessoa` (`id_pessoa`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `pessoa`
---
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_genero`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_genero` (
+  `id_genero` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id_genero`),
+  UNIQUE INDEX `id_genero_UNIQUE` (`id_genero` ASC) )
+ENGINE = InnoDB;
 
-CREATE TABLE `pessoa` (
-  `id_pessoa` int(10) UNSIGNED NOT NULL,
-  `nome` varchar(45) NOT NULL,
-  `email` varchar(90) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Extraindo dados da tabela `pessoa`
---
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_autor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_autor` (
+  `id_autor` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id_autor`),
+  UNIQUE INDEX `id_autor_UNIQUE` (`id_autor` ASC) )
+ENGINE = InnoDB;
 
-INSERT INTO `pessoa` (`id_pessoa`, `nome`, `email`) VALUES
-(1, 'Malaquias Fulgêncio', 'malaful@gmail.com'),
-(2, 'Melquisedecker  Alves', 'melves@gmail.com'),
-(3, 'Cândido Farias', 'candido@gmail.com');
 
--- --------------------------------------------------------
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_obra_autor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_obra_autor` (
+  `biblio_obra_id_obra` INT UNSIGNED NOT NULL,
+  `biblio_autor_id_autor` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`biblio_obra_id_obra`, `biblio_autor_id_autor`),
+  INDEX `fk_biblio_obra_has_biblio_autor_biblio_autor1_idx` (`biblio_autor_id_autor` ASC) ,
+  INDEX `fk_biblio_obra_has_biblio_autor_biblio_obra1_idx` (`biblio_obra_id_obra` ASC) ,
+  CONSTRAINT `fk_biblio_obra_has_biblio_autor_biblio_obra1`
+    FOREIGN KEY (`biblio_obra_id_obra`)
+    REFERENCES `cimol`.`biblio_obra` (`id_obra`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_biblio_obra_has_biblio_autor_biblio_autor1`
+    FOREIGN KEY (`biblio_autor_id_autor`)
+    REFERENCES `cimol`.`biblio_autor` (`id_autor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
---
--- Estrutura da tabela `professor`
---
 
-CREATE TABLE `professor` (
-  `pessoa_id_pessoa` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `professor`
---
-
-INSERT INTO `professor` (`pessoa_id_pessoa`) VALUES
-(3);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `usuario`
---
-
-CREATE TABLE `usuario` (
-  `senha` varchar(60) NOT NULL,
-  `pessoa_id_pessoa` int(10) UNSIGNED NOT NULL,
-  `token` varchar(120) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `usuario`
---
-
-INSERT INTO `usuario` (`senha`, `pessoa_id_pessoa`, `token`) VALUES
-('45b45c21a0cdd1479235e69c936a09e6', 1, NULL),
-('45b45c21a0cdd1479235e69c936a09e6', 2, NULL),
-('45b45c21a0cdd1479235e69c936a09e6', 3, NULL);
-
---
--- Índices para tabelas despejadas
---
-
---
--- Índices para tabela `administrador`
---
-ALTER TABLE `administrador`
-  ADD PRIMARY KEY (`pessoa_id_pessoa`);
-
---
--- Índices para tabela `aluno`
---
-ALTER TABLE `aluno`
-  ADD PRIMARY KEY (`pessoa_id_pessoa`);
-
---
--- Índices para tabela `aluno_curso`
---
-ALTER TABLE `aluno_curso`
-  ADD PRIMARY KEY (`aluno_pessoa_id_pessoa`,`curso_id_curso`),
-  ADD KEY `fk_aluno_has_curso_curso1_idx` (`curso_id_curso`),
-  ADD KEY `fk_aluno_has_curso_aluno1_idx` (`aluno_pessoa_id_pessoa`);
-
---
--- Índices para tabela `coordenacao`
---
-ALTER TABLE `coordenacao`
-  ADD PRIMARY KEY (`professor_pessoa_id_pessoa`,`curso_id_curso`),
-  ADD KEY `fk_professor_has_curso_curso1_idx` (`curso_id_curso`),
-  ADD KEY `fk_professor_has_curso_professor1_idx` (`professor_pessoa_id_pessoa`);
-
---
--- Índices para tabela `curso`
---
-ALTER TABLE `curso`
-  ADD PRIMARY KEY (`id_curso`),
-  ADD UNIQUE KEY `id_curso_UNIQUE` (`id_curso`);
-
---
--- Índices para tabela `pessoa`
---
-ALTER TABLE `pessoa`
-  ADD PRIMARY KEY (`id_pessoa`),
-  ADD UNIQUE KEY `id_pessoa_UNIQUE` (`id_pessoa`);
-
---
--- Índices para tabela `professor`
---
-ALTER TABLE `professor`
-  ADD PRIMARY KEY (`pessoa_id_pessoa`);
-
---
--- Índices para tabela `usuario`
---
-ALTER TABLE `usuario`
-  ADD KEY `fk_usuario_pessoa1_idx` (`pessoa_id_pessoa`);
-
---
--- AUTO_INCREMENT de tabelas despejadas
---
-
---
--- AUTO_INCREMENT de tabela `curso`
---
-ALTER TABLE `curso`
-  MODIFY `id_curso` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `pessoa`
---
-ALTER TABLE `pessoa`
-  MODIFY `id_pessoa` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Restrições para despejos de tabelas
---
-
---
--- Limitadores para a tabela `administrador`
---
-ALTER TABLE `administrador`
-  ADD CONSTRAINT `fk_administrador_pessoa1` FOREIGN KEY (`pessoa_id_pessoa`) REFERENCES `pessoa` (`id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `aluno`
---
-ALTER TABLE `aluno`
-  ADD CONSTRAINT `fk_aluno_pessoa1` FOREIGN KEY (`pessoa_id_pessoa`) REFERENCES `pessoa` (`id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `aluno_curso`
---
-ALTER TABLE `aluno_curso`
-  ADD CONSTRAINT `fk_aluno_has_curso_aluno1` FOREIGN KEY (`aluno_pessoa_id_pessoa`) REFERENCES `aluno` (`pessoa_id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_aluno_has_curso_curso1` FOREIGN KEY (`curso_id_curso`) REFERENCES `curso` (`id_curso`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `coordenacao`
---
-ALTER TABLE `coordenacao`
-  ADD CONSTRAINT `fk_professor_has_curso_curso1` FOREIGN KEY (`curso_id_curso`) REFERENCES `curso` (`id_curso`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_professor_has_curso_professor1` FOREIGN KEY (`professor_pessoa_id_pessoa`) REFERENCES `professor` (`pessoa_id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `professor`
---
-ALTER TABLE `professor`
-  ADD CONSTRAINT `fk_professor_pessoa` FOREIGN KEY (`pessoa_id_pessoa`) REFERENCES `pessoa` (`id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Limitadores para a tabela `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `fk_usuario_pessoa1` FOREIGN KEY (`pessoa_id_pessoa`) REFERENCES `pessoa` (`id_pessoa`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- -----------------------------------------------------
+-- Table `cimol`.`biblio_obra_genero`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cimol`.`biblio_obra_genero` (
+  `biblio_obra_id_obra` INT UNSIGNED NOT NULL,
+  `biblio_genero_id_genero` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`biblio_obra_id_obra`, `biblio_genero_id_genero`),
+  INDEX `fk_biblio_obra_has_biblio_genero_biblio_genero1_idx` (`biblio_genero_id_genero` ASC) ,
+  INDEX `fk_biblio_obra_has_biblio_genero_biblio_obra1_idx` (`biblio_obra_id_obra` ASC) ,
+  CONSTRAINT `fk_biblio_obra_has_biblio_genero_biblio_obra1`
+    FOREIGN KEY (`biblio_obra_id_obra`)
+    REFERENCES `cimol`.`biblio_obra` (`id_obra`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_biblio_obra_has_biblio_genero_biblio_genero1`
+    FOREIGN KEY (`biblio_genero_id_genero`)
+    REFERENCES `cimol`.`biblio_genero` (`id_genero`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

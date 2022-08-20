@@ -9,6 +9,4 @@ app.use(express.json());
 const route=require("./routers/route");
 app.use('/', route);
 
-
 module.exports=app;
-
