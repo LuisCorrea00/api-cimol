@@ -53,21 +53,16 @@ verifyJWT= async (token, perfil)=>{
   }
   
   jwt.verify(token, 'CIMOL', function(err, decoded) { 
-     
-     if (err){
-        resp= { auth: false, message: 'Token inválido!' };
-     }
-     if(decoded){
-        
-      resp= {auth:true, idUser:decoded.id};
-      
-        
-     }
+      if (err){
+         resp= { auth: false, message: 'Token inválido!' };
+      }
+      if(decoded){
+         resp= {auth:true, idUser:decoded.id};
+      }
   });
   if(resp.auth){
    sql="SELECT perfil FROM usuario WHERE pessoa_id_pessoa="+resp.idUser;
    usuario= await  mysql.query(sql);
-   
    if(usuario[0].perfil.indexOf(perfil)<0){
        resp= { auth: false, message: 'Perfil Inválido!' };
    }
