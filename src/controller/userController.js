@@ -1,7 +1,10 @@
 const userModel=require("../model/userModel");
 
 exports.get= async (headers)=>{
-  auth=await userModel.verifyJWT(headers['x-access-token'],headers.perfil);
+  if(headers['perfil']!="admin"){
+    return {status:"null",msg:"Operação não permitida", auth}
+  }
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   users={};
   if(auth.idUser){
     if(headers.iduser==auth.idUser){

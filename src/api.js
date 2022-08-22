@@ -17,11 +17,27 @@ const {
   
   } = require ('./config');
 
-//const router=express.Router();
+//====================== Rotas  =======================
 const route=require("./routers/route");
 const userRoute=require("./routers/user");
+const cursoRoute=require("./routers/curso");
+const alunoRoute=require("./routers/aluno");
+const professorRoute=require("./routers/professor");
+const bibliotecaRoute=require("./routers/biblioteca");
+const horarioRoute=require("./routers/horario");
+const curriculoRoute=require("./routers/curriculo");
+const patrimonioRoute=require("./routers/patrimonio");
 app.use('/', route);
 app.use('/user', userRoute);
+app.use('/curso', cursoRoute);
+app.use('/aluno', alunoRoute);
+app.use('/professor', professorRoute);
+app.use('/biblioteca', bibliotecaRoute);
+app.use('/horario', horarioRoute);
+app.use('/aluno/curriculo', curriculoRoute);
+app.use('/curso/patrimonio',patrimonioRoute);
+
+
 
 module.exports=app;
 
