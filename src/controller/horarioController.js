@@ -2,7 +2,7 @@ const horarioModel=require("../model/horarioModel");
 const userModel=require("../model/userModel");
 
 exports.getByTurma = async (headers,idTurma)=>{
-    auth= await userModel.verifyJWT(headers['x-access-token'],, headers['perfil']);
+    auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
     if(auth.idUser){
       
       if(headers.iduser==auth.idUser){
