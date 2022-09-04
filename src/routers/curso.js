@@ -1,6 +1,7 @@
 const express=require('express');
 const cursoController=require("../controller/cursoController");
-const cursoRouter = express.Router(); 
+const cursoRouter = express.Router();
+ 
 cursoRouter.get('/', async(req, res, next)=>{
     curso=await cursoController.get(req.headers);
     res.status(200).send(curso);

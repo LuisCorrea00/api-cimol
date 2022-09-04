@@ -21,6 +21,7 @@ const {
 const route=require("./routers/route");
 const userRoute=require("./routers/user");
 const cursoRoute=require("./routers/curso");
+const turmaRoute=require("./routers/turma");
 const alunoRoute=require("./routers/aluno");
 const armarioRoute=require("./routers/armario");
 const professorRoute=require("./routers/professor");
@@ -31,8 +32,9 @@ const patrimonioRoute=require("./routers/patrimonio");
 app.use('/', route);
 app.use('/user', userRoute);
 app.use('/curso', cursoRoute);
+app.use('/curso/turmas', turmaRoute);
 app.use('/aluno', alunoRoute);
-app.use('/armario', armarioRoute);
+app.use('/curso/armarios', armarioRoute);
 app.use('/professor', professorRoute);
 app.use('/biblioteca', bibliotecaRoute);
 app.use('/horario', horarioRoute);

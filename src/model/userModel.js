@@ -18,6 +18,8 @@ login= async (data)=>{
    " FROM usuario u"+
    " JOIN pessoa p ON p.id_pessoa=u.pessoa_id_pessoa"+
    " WHERE p.email='"+data.email+"' AND u.senha='"+data.senha+"' ";
+
+   console.log(sql)
    const usuarios = await  mysql.query(sql);
   
    result=null;
@@ -67,7 +69,7 @@ login= async (data)=>{
    }else{
       result={ auth: true, token: token , user:null};
    }
-  
+  console.log(result)
   return result;
 }
 

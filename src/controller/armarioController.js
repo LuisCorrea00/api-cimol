@@ -1,5 +1,5 @@
 const userModel=require("../model/userModel");
-const armariosModel=require("../model/armariosModel");
+const armariosModel=require("../model/armarioModel");
 
 
 

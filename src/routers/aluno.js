@@ -6,4 +6,5 @@ alunoRouter.get('/', async(req, res, next)=>{
     res.status(200).send(aluno);
   })
 
+  
 module.exports=alunoRouter;

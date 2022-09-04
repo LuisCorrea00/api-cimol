@@ -1,6 +1,5 @@
 const express=require('express');
 
-const cursoController=require("../controller/cursoController");
 const router = express.Router();
 
 router.get('/', (req, res, next)=>{
