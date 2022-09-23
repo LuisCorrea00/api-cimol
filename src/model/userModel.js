@@ -75,6 +75,7 @@ login= async (data)=>{
 
 
 verifyJWT= async (token, perfil)=>{ 
+   console.log(token)
    if (!token){
       resp= { auth: false, message: 'Token não informado.' }; 
    }
