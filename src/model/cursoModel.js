@@ -3,6 +3,14 @@ get=async()=>{
     return await mysql.query("SELECT c.id_curso, c.nome, c.numero, c.logo FROM curso c");
 }
 
+getCurso=async(id_curso)=>{
+  return await mysql.query("SELECT c.id_curso, c.nome, c.numero, c.logo, p.nome AS nomeCoordenador " 
+  +"FROM curso c "
+  +"JOIN coordenacao cc ON cc.curso_id_curso=c.id_curso "
+  +"JOIN pessoa p ON p.id_pessoa=cc.professor_pessoa_id_pessoa "
+  +"WHERE id_curso="+id_curso);
+}
+
 post= async (data)=>{
   sql="INSERT INTO curso"+
   " (nome, numero)"+
@@ -34,4 +42,4 @@ put= async (data, idCurso)=>{
 
 }
 
-module.exports={get, post}
+module.exports={get, getCurso, post}

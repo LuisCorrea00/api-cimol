@@ -6,6 +6,11 @@ cursoRouter.get('/', async(req, res, next)=>{
     curso=await cursoController.get(req.headers);
     res.status(200).send(curso);
   })
+
+  cursoRouter.get('/:idCurso', async(req, res, next)=>{
+    curso=await cursoController.getCurso(req.headers, req.params.idCurso);
+    res.status(200).send(curso);
+  })
   
 cursoRouter.post('/', async(req, res, next)=>{
     resp=await cursoController.post (req.headers, req.body);

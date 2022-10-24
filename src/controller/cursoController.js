@@ -30,6 +30,21 @@ exports.get= async (headers)=>{
   return resp;
 }
 
+exports.getCurso= async (headers, id_curso)=>{
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+    if(headers.iduser==auth.idUser){
+      resp=await cursoModel.getCurso(id_curso);
+      resp=resp[0];
+    }else{ 
+      resp= {"status":"null", auth}
+    }
+  }else{
+    resp= {"status":"null", auth}
+  }
+  return resp;
+}
+
 exports.put= async (headers, data, idCurso)=>{
   auth= await userModel.verifyJWT(headers['x-access-token'],headers['perfil']);
   if(auth.idUser){

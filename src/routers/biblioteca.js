@@ -28,11 +28,7 @@ bibliotecaRouter.get('/', (req, res, next)=>{
     res.status(200).send(resp);
     console.log("Achei 2");
   });
-  
-  // bibliotecaRouter.put('/biblioteca/obra/:obraId', async(req, res)=>{
-  //   resp=await obraController.put (req.headers, req.body, req.params.obraId );
-  //   res.status(200).send(resp);
-  // })
+ 
   
   bibliotecaRouter.post('/biblioteca/autor', async(req, res, next)=>{
     resp=await autorController.post (req.headers, req.body);
