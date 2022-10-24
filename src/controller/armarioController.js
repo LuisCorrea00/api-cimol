@@ -1,8 +1,9 @@
 const userModel=require("../model/userModel");
 const armariosModel=require("../model/armarioModel");
 
+//BUSCAR ARMARIOS
 exports.get= async (headers,idCurso)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await armariosModel.get(idCurso);
@@ -16,8 +17,10 @@ exports.get= async (headers,idCurso)=>{
   return resp;
 }
 
+//CRIAR ARMARIOS
 exports.post = async (headers, body, idCurso)=>{
-  auth=userModel.verifyJWT(headers['x-acess-token']);
+  console.log(headers['x-access-token'])
+  auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await armariosModel.post(body, idCurso);
@@ -31,11 +34,12 @@ exports.post = async (headers, body, idCurso)=>{
   return resp;
 }
 
-exports.locar = async (_body, headers, idCurso)=>{
-  auth=serModel.verifyJWT(headers['x-acess-token']);
+//LOCAR ARMARIOS
+exports.locar = async ( headers, body, idCurso)=>{
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
-      resp=await armariosModel.locar(idCurso);
+      resp=await armariosModel.locar(body, idCurso);
     }else{
       resp={"status":"null", auth}
     }
@@ -46,11 +50,12 @@ exports.locar = async (_body, headers, idCurso)=>{
   return resp;
 }
 
-/*exports.devolver=async(body, _headers, idCurso)=>{
-  auth=serModel.verifyJWT(body['x-acess-token']);
+//DEVOLVER ARMARIOS
+exports.devolver = async( headers, body, idCurso)=>{
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
-    if(body.iduser==auth.idUser){
-      resp=await armariosModel.devolver(idCurso);;
+    if(headers.iduser==auth.idUser){
+      resp=await armariosModel.devolver(body, idCurso);;
     }else{
       resp={"status":"null", auth}
     }
@@ -59,5 +64,5 @@ exports.locar = async (_body, headers, idCurso)=>{
   }
   console.log(resp);
   return resp;
-}*/
+}
 
