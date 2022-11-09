@@ -4,6 +4,7 @@ const armarioRouter = express.Router();
 
 
 armarioRouter.get('/:idCurso', async(req, res, next)=>{
+    console.log(req.params.idCurso);
     armarios=await armariosController.get(req.headers, req.params.idCurso);
     res.status(200).send(armarios);
   })
