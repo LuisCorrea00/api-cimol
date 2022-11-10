@@ -9,7 +9,6 @@ get=async(idCurso)=>{
     let armarios = await mysql.query(sql);
     for(i=0; i<armarios.length; i++){
         armarios [i].cor="green";
-
         if(armarios[i].locado>0){
             armarios[i].cor="blue";
             if(armarios[i].atraso>0){
@@ -27,7 +26,16 @@ busca =async(id_armario)=>{
 
     sql +="from armario a WHERE id_armario="+id_armario;
     
-    return await mysql.query(sql);
+    let armario= await mysql.query(sql);
+    if(armario[0].locado===0){
+        armario[0].txLocado="Disponível";
+    }else if(armario[0].locado>1){
+        armario[0].txLocado="Ocupado";
+        if(armario[0].atraso>0){
+            armario[0].txLocado="Ocupado e atrasado";
+        }
+    }
+    return armario;
 }
 
 
