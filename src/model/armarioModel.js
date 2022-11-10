@@ -6,9 +6,31 @@ get=async(idCurso)=>{
     sql+="(SELECT count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) as atraso ";
 
     sql +="from armario a WHERE curso_id_curso="+idCurso;
-    return await mysql.query(sql);
+    let armarios = await mysql.query(sql);
+    for(i=0; i<armarios.length; i++){
+        armarios [i].cor="green";
 
+        if(armarios[i].locado>0){
+            armarios[i].cor="blue";
+            if(armarios[i].atraso>0){
+                armarios[i].cor="red";
+            }
+        }
+    }
+    return armarios;
 }
+
+busca =async(id_armario)=>{
+    sql = "SELECT a.id_armario, a.numero, a.local,";
+    sql += "(select count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null) AS locado, ";
+    sql += "(SELECT count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) as atraso ";
+
+    sql +="from armario a WHERE id_armario="+id_armario;
+    
+    return await mysql.query(sql);
+}
+
+
 //CRIAR ARMÁRIOS 
 //'data' refere-se a dados passados
 post = async(data, idCurso)=>{
@@ -56,4 +78,4 @@ devolver = async(data, idCurso)=>{
 
 }
 
-module.exports={get,post,put, locar, devolver}
+module.exports={get,post,put, locar, devolver, busca}

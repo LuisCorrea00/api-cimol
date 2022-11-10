@@ -4,11 +4,15 @@ const armarioRouter = express.Router();
 
 
 armarioRouter.get('/:idCurso', async(req, res, next)=>{
-    console.log(req.params.idCurso);
     armarios=await armariosController.get(req.headers, req.params.idCurso);
     res.status(200).send(armarios);
   })
   
+  armarioRouter.get('/busca/:idArmario', async(req, res, next)=>{
+    armarios=await armariosController.busca(req.headers, req.params.idArmario);
+    res.status(200).send(armarios);
+  })
+
 armarioRouter.post('/:idCurso', async(req, res, next)=>{
     resposta=await armariosController.post(req.headers, req.body, req.params.idCurso);
     res.status(200).send(resposta);

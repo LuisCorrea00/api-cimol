@@ -17,6 +17,23 @@ exports.get= async (headers,idCurso)=>{
   return resp;
 }
 
+//DADOS DOS ARMARIOS
+exports.busca= async (headers,idArmario)=>{
+  auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+    if(headers.iduser==auth.idUser){
+      resp=await armariosModel.busca(idArmario);
+      console.log(resp);
+    }else{ 
+      resp= {"status":"null", auth}
+    }
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
+  return resp;
+}
+
 //CRIAR ARMARIOS
 exports.post = async (headers, body, idCurso)=>{
   console.log(headers['x-access-token'])
