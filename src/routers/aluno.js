@@ -6,5 +6,9 @@ alunoRouter.get('/', async(req, res, next)=>{
     res.status(200).send(aluno);
   })
 
+alunoRouter.get('/lista', async(req, res, next)=>{
+  aluno=await alunoController.get();
+  res.status(200).send(aluno);
+})
   
 module.exports=alunoRouter;

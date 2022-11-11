@@ -18,7 +18,7 @@ exports.get= async (headers,idCurso)=>{
 }
 
 //DADOS DOS ARMARIOS
-exports.busca= async (headers,idArmario)=>{
+exports.busca= async (headers, idArmario)=>{
   auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
@@ -68,11 +68,11 @@ exports.locar = async ( headers, body, idCurso)=>{
 }
 
 //DEVOLVER ARMARIOS
-exports.devolver = async( headers, body, idCurso)=>{
+exports.devolver = async( headers, body, idArmario)=>{
   auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
-      resp=await armariosModel.devolver(body, idCurso);;
+      resp=await armariosModel.devolver( body.id_armario, body.id_aluno);
     }else{
       resp={"status":"null", auth}
     }

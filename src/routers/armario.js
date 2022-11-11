@@ -23,8 +23,8 @@ armarioRouter.post('/:idCurso', async(req, res, next)=>{
       res.status(200).send(locacaoArmarios);
   })
 
-  armarioRouter.post('/devolver/:idCurso', async(req, res, next)=>{
-    devolucaoArmarios=await armariosController.devolver(req.headers, req.body, req.params.idCurso);
+  armarioRouter.post('/devolver/:idArmario', async(req, res, next)=>{
+    devolucaoArmarios=await armariosController.devolver(req.headers, req.body, req.params.idArmario);
     res.status(200).send(devolucaoArmarios);
   })
 

@@ -1,11 +1,11 @@
 const mysql=require("./mysqlConnect");
 get=async(idCurso)=>{
     sql= "SELECT a.id_armario, a.numero ,a.local, ";
-    sql += "(select count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null ) AS locado ,";
+    sql += "(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null ) AS locado ,";
 
-    sql+="(SELECT count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) as atraso ";
+    sql+="(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) AS atraso ";
 
-    sql +="from armario a WHERE curso_id_curso="+idCurso;
+    sql +="FROM armario a WHERE curso_id_curso="+idCurso;
     let armarios = await mysql.query(sql);
     for(i=0; i<armarios.length; i++){
         armarios [i].cor="green";
@@ -21,15 +21,22 @@ get=async(idCurso)=>{
 
 busca =async(id_armario)=>{
     sql = "SELECT a.id_armario, a.numero, a.local,";
-    sql += "(select count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null) AS locado, ";
-    sql += "(SELECT count(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) as atraso ";
+    sql += "(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null) AS locado, ";
+    sql += "(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) as atraso ";
 
     sql +="from armario a WHERE id_armario="+id_armario;
     
     let armario= await mysql.query(sql);
     if(armario[0].locado===0){
         armario[0].txLocado="Disponível";
-    }else if(armario[0].locado>1){
+    }else if(armario[0].locado>0){
+        sql = "SELECT distinct p.id_pessoa AS id_aluno, p.nome  FROM pessoa p ";
+        sql += "JOIN aluno a ON a.pessoa_id_pessoa = p.id_pessoa ";
+        sql +="JOIN armario_aluno aa ON a.pessoa_id_pessoa = aa.aluno_pessoa_id_pessoa ";
+        sql +="WHERE aa.armario_id_armario = ";
+        sql += armario[0].id_armario;
+        let aluno=await mysql.query(sql); 
+        armario[0].aluno=aluno[0];
         armario[0].txLocado="Ocupado";
         if(armario[0].atraso>0){
             armario[0].txLocado="Ocupado e atrasado";
@@ -38,14 +45,13 @@ busca =async(id_armario)=>{
     return armario;
 }
 
-
 //CRIAR ARMÁRIOS 
 //'data' refere-se a dados passados
 post = async(data, idCurso)=>{
-    sql="INSERT INTO armario"+
-    "(numero, local, curso_id_curso)"+
-    "VALUE"+
-    "('"+data.numero+"', '"+data.local+"', "+idCurso+")";
+    sql="INSERT INTO armario "+
+    "(numero, local, curso_id_curso) "+
+    "VALUE "+
+    "('"+data.numero+"', '"+data.local+"', "+idCurso+") ";
     const result = await mysql.query(sql);
 
     if(result){
@@ -70,12 +76,13 @@ locar = async(data, idCurso)=>{
     }return resp;
 }
 
-//DEVOLUÇÃO ARMÁRIOS
-devolver = async(data, idCurso)=>{
-    sql= "UPDATE armario_aluno"+ 
-    "SET id_armario = armario_id_armario"+
-    "SET dataDevolucao = data_devolucao"+
-    "WHERE ('"+data.id_aluno+"', '"+data.data_devolucao+"')";
+    //DEVOLUÇÃO ARMÁRIOS
+devolver = async(idArmario, idAluno)=>{
+    sql= "UPDATE armario_aluno "+ 
+    "SET data_devolucao = NOW() "+
+    "WHERE armario_id_armario = " +idArmario+ " AND aluno_pessoa_id_pessoa = " +idAluno;
+
+    console.log(sql)
     const result = await mysql.query(sql);
 
     if(result){
@@ -86,4 +93,4 @@ devolver = async(data, idCurso)=>{
 
 }
 
-module.exports={get,post,put, locar, devolver, busca}
+module.exports={get,post,put,locar,devolver,busca};
