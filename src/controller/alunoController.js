@@ -1,12 +1,17 @@
+const userModel=require("../model/userModel");
+const alunoModel=require("../model/alunoModel");
+
 exports.get= async ()=>{
     return {"controller":"aluno"};
 }
 
-exports.lista= async (headers, idAluno)=>{
-    auth = await userModel.verifyJWT(headers['x-access-token'], headers['id_aluno']);
-    if(auth.idAluno){
-        if(headers.idAluno==auth.idAluno){
-            resp=await alunoModel.lista(idAluno);
+exports.lista= async (headers, idcurso)=>{
+    console.log(headers);
+    console.log(idCurso);
+    auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+    if(auth.idUser){
+        if(headers.iduser==auth.idUser){
+            resp=await alunoModel.get(idCurso);
         }else{
             resp = {"status":"null", auth}
         }
