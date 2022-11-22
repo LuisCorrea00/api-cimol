@@ -1,9 +1,11 @@
 const mysql=require("./mysqlConnect");
+const moment = require('moment'); 
+
 get=async(idCurso)=>{
     sql= "SELECT a.id_armario, a.numero ,a.local, ";
     sql += "(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_devolucao IS null ) AS locado ,";
 
-    sql+="(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < '2022-08-11' AND data_devolucao IS null ) AS atraso ";
+    sql+="(SELECT COUNT(armario_id_armario) FROM armario_aluno WHERE armario_id_armario=a.id_armario AND data_previsao_devolucao < NOW() AND data_devolucao IS null ) AS atraso ";
 
     sql +="FROM armario a WHERE curso_id_curso="+idCurso;
     let armarios = await mysql.query(sql);
@@ -41,6 +43,14 @@ busca =async(id_armario)=>{
         if(armario[0].atraso>0){
             armario[0].txLocado="Ocupado e atrasado";
         }
+
+        sql="SELECT data_locacao, data_devolucao, data_previsao_devolucao FROM armario_aluno WHERE armario_id_armario="+armario[0].id_armario;
+        let dadosLocacao = await mysql.query(sql);
+        console.log(dadosLocacao);
+        if(dadosLocacao.length>0){
+            armario[0].dataLocacao=moment(dadosLocacao[0].data_locacao).format('DD/MM/YYYY');
+            armario[0].dataPrevDevolucao=moment(dadosLocacao[0].data_previsao_devolucao).format('DD/MM/YYYY');
+        }
     }
     return armario;
 }
@@ -66,7 +76,7 @@ locar = async(data, idCurso)=>{
     sql="INSERT INTO armario_aluno"+
     "(armario_id_armario, aluno_pessoa_id_pessoa,  data_locacao, data_previsao_devolucao)"+
     "VALUE"+
-    "('"+data.id_armario+"', '"+data.id_aluno+"',  '"+data.data_locacao+"', '"+data.data_previsao_devolucao+"')";
+    "('"+data.id_armario+"', '"+data.id_aluno+"',  NOW(), '"+data.data_previsao_devolucao+"')";
     const result = await mysql.query(sql);
 
     if(result){
