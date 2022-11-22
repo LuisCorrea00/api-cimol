@@ -9,7 +9,7 @@ const jwt=require("jsonwebtoken");
 login= async (data)=>{
    sql="SELECT p.id_pessoa as id, p.nome, p.email,"+
    " (SELECT COUNT(pessoa_id_pessoa) FROM professor WHERE pessoa_id_pessoa=p.id_pessoa) as professor,"+
-   "(SELECT COUNT(pessoa_id_pessoa) FROM coordenacao WHERE pessoa_id_pessoa=p.id_pessoa) as coordenador,"+
+   "(SELECT COUNT(professor_pessoa_id_pessoa) FROM coordenacao WHERE professor_pessoa_id_pessoa=p.id_pessoa) as coordenador,"+
    " (SELECT COUNT(pessoa_id_pessoa) FROM aluno WHERE pessoa_id_pessoa=p.id_pessoa) as aluno,"+
    " (SELECT COUNT(pessoa_id_pessoa) FROM biblioteca WHERE pessoa_id_pessoa=p.id_pessoa) as biblioteca,"+
    
