@@ -4,11 +4,11 @@ async function connect(){
 
   const mysql = require("mysql2/promise");
   const connection = await mysql.createConnection({
-      host: '127.0.0.1',
-      port:'3308',
-      user: 'root',
-      password : 'mysql',
-      database: 'cimol'
+      host: 'private-db-mysql-sfo3-95135-do-user-12927057-0.b.db.ondigitalocean.com',
+      port:'25060',
+      user: 'doadmin',
+      password : 'AVNS_SOm51ZeZIavFnTW5Al5',
+      database: 'defaultdb'
       
     });
   console.log("Conectou no MySQL!");
