@@ -2,7 +2,7 @@ const userModel=require("../../model/userModel");
 const obraModel=require("../../model/biblioteca/obraModel");
 
 exports.post= async (headers, data)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=obraModel.post(data);
@@ -16,7 +16,7 @@ exports.post= async (headers, data)=>{
 }
 
 exports.get= async (headers)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await obraModel.get();
@@ -30,8 +30,23 @@ exports.get= async (headers)=>{
   return resp;
 }
 
+exports.getPreset= async (headers)=>{
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+    if(headers.iduser==auth.idUser){
+      resp=await obraModel.getPreset();
+    }else{ 
+      resp= {"status":"null", auth}
+    }
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
+  return resp;
+}
+
 exports.getById = async (headers, obraId)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await obraModel.getById(obraId);
@@ -41,6 +56,7 @@ exports.getById = async (headers, obraId)=>{
   }else{
     resp= {"status":"null", auth}
   }
+  console.log(resp);
   return resp;
 }
 
@@ -50,8 +66,30 @@ exports.put = async (headers, data, obraId)=>{
   return resp;
 }
 
+exports.getObraRetirada= async (headers)=>{
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+      resp=await obraModel.getObraRetirada();
+
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
+  return resp;
+}
+
+exports.putStatus = async (headers, data, obraId)=>{
+  resp=await obraModel.putStatus(data, obraId);
+  return resp;
+}
+
+exports.putStatusDisp = async (headers, data, obraId)=>{
+  resp=await obraModel.putStatusDisp(data, obraId);
+  return resp;
+}
+
 exports.del = async (headers, data, obraId)=>{
-  auth=userModel.verifyJWT(headers['x-access-token']);
+  auth = await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await obraModel.del(data, obraId);
@@ -61,5 +99,38 @@ exports.del = async (headers, data, obraId)=>{
   }else{
     resp= {"status":"null", auth}
   }
+  return resp;
+}
+
+exports.getByGenero = async (headers, generoId)=>{
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+      resp=await obraModel.getByGenero(generoId);
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
+  return resp;
+}
+
+exports.getBySearch = async (headers, search)=>{
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+    resp=await obraModel.getBySearch(search);
+  }else{
+    resp= {"status":"null", auth}
+  }
+  return resp;
+}
+
+exports.getEmail= async (headers)=>{
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+      resp=await obraModel.getEmail();
+
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
   return resp;
 }
