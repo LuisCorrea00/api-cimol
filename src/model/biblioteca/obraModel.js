@@ -5,7 +5,7 @@ const mysql = require("../mysqlConnect");
 // }
 
 get = async () => {
-    return await mysql.query("SELECT o.id_obra, o.titulo, o.img, o.situacao, o.relevancia, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_autor AS oa ON o.id_obra=oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON a.id_autor = oa.biblio_autor_id_autor GROUP BY (o.id_obra) ORDER BY o.relevancia DESC LIMIT 20");
+    return await mysql.query("SELECT o.id_obra, o.titulo, o.img, o.situacao, o.relevancia, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_autor AS oa ON o.id_obra=oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON a.id_autor = oa.biblio_autor_id_autor WHERE o.situacao LIKE 'disponivel' GROUP BY (o.id_obra) ORDER BY o.relevancia DESC LIMIT 20");
 }
 
 getById = async (obraId) => {
