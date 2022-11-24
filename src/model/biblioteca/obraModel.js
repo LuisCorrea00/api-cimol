@@ -21,7 +21,7 @@ getByGenero = async (generoId) => {
 }
 
 getBySearch = async (search) => {
-    return await mysql.query(`SELECT o.* FROM biblio_obra AS o LEFT JOIN biblio_obra_genero AS og ON o.id_obra = og.biblio_obra_id_obra LEFT JOIN biblio_genero AS g ON og.biblio_genero_id_genero = g.id_genero LEFT JOIN biblio_obra_autor AS oa ON o.id_obra = oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON oa.biblio_autor_id_autor = a.id_autor LEFT JOIN biblio_tipo AS t ON o.tipo_id_tipo = t.id_tipo LEFT JOIN biblio_editora AS e ON o.editora_id_editora = e.id_editora WHERE o.titulo LIKE "%${search}%" OR g.nome LIKE "%${search}%" OR a.nome LIKE "%${search}%" GROUP BY(o.id_obra)`);
+    return await mysql.query(`SELECT o.id_obra, o.titulo, o.img, o.situacao, o.relevancia, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_genero AS og ON o.id_obra = og.biblio_obra_id_obra LEFT JOIN biblio_genero AS g ON og.biblio_genero_id_genero = g.id_genero LEFT JOIN biblio_obra_autor AS oa ON o.id_obra = oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON oa.biblio_autor_id_autor = a.id_autor LEFT JOIN biblio_tipo AS t ON o.tipo_id_tipo = t.id_tipo LEFT JOIN biblio_editora AS e ON o.editora_id_editora = e.id_editora WHERE o.titulo LIKE "%${search}%" OR g.nome LIKE "%${search}%" OR a.nome LIKE "%${search}%" GROUP BY(o.id_obra)`);
 }
 
 getObraRetirada = async() => {
