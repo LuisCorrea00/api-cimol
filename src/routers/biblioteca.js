@@ -30,7 +30,7 @@ bibliotecaRouter.get('/', (req, res, next)=>{
   });
  
   
-  bibliotecaRouter.post('/biblioteca/autor', async(req, res, next)=>{
+  bibliotecaRouter.post('/autor', async(req, res, next)=>{
     resp=await autorController.post (req.headers, req.body);
     res.status(200).send(resp);
   })
@@ -95,11 +95,26 @@ bibliotecaRouter.get('/', (req, res, next)=>{
     res.status(200).send(resp);
   });
   
+  bibliotecaRouter.get('/obra/preset', async(req, res, next)=>{
+    resp=await obraController.getPreset(req.headers);
+    res.status(200).send(resp);
+  });
+
   bibliotecaRouter.post('/obra', async(req, res, next)=>{
     resp=await obraController.post (req.headers, req.body);
     res.status(200).send(resp);
   });
+
+  bibliotecaRouter.get('/obra/retirada', async(req, res, next)=>{
+    resp=await obraController.getObraRetirada(req.headers);
+    res.status(200).send(resp);
+  })
   
+  bibliotecaRouter.get('/obra/:obraId', async(req, res, next)=>{
+    resp=await obraController.getById(req.headers, req.params.obraId);
+    res.status(200).send(resp);
+  });
+
   bibliotecaRouter.put('/obra/:obraId', async(req, res)=>{
     resp=await obraController.put (req.headers, req.body, req.params.obraId );
     res.status(200).send(resp);
@@ -108,6 +123,46 @@ bibliotecaRouter.get('/', (req, res, next)=>{
   bibliotecaRouter.delete('/obra/:obraId', async(req, res)=>{
     resp=await obraController.del (req.headers, req.body, req.params.obraId );
     res.status(200).send(resp);
+  })
+
+  bibliotecaRouter.delete('/editora/:editoraId', async(req, res)=>{
+    resp=await editoraController.del (req.headers, req.params.editoraId );
+    res.status(200).send(resp);
+  })
+
+  bibliotecaRouter.get('/obra/genero/:generoId', async(req, res, next)=>{
+    resp=await obraController.getByGenero(req.headers, req.params.generoId);
+    res.status(200).send(resp);
+  });
+
+  bibliotecaRouter.get('/obras/:search', async(req, res, next)=>{
+    resp=await obraController.getBySearch(req.headers, req.params.search);
+    res.status(200).send(resp);
+  });
+
+  bibliotecaRouter.get('/generos/:obraId', async(req, res, next)=>{
+    user=await generoController.getByObraId(req.headers, req.params.obraId);
+    res.status(200).send(user);
+  })
+
+  bibliotecaRouter.get('/autores/:obraId', async(req, res, next)=>{
+    user=await autorController.getByObraId(req.headers, req.params.obraId);
+    res.status(200).send(user);
+  })
+
+  bibliotecaRouter.put('/statusdisp/:obraId', async(req, res)=>{
+    resp=await obraController.putStatusDisp (req.headers, req.body, req.params.obraId );
+    res.status(200).send(resp);
+  })
+
+  bibliotecaRouter.put('/status/:obraId', async(req, res)=>{
+    resp=await obraController.putStatus (req.headers, req.body, req.params.obraId );
+    res.status(200).send(resp);
+  })
+
+  bibliotecaRouter.get('/email', async(req, res, next)=>{
+    user=await obraController.getEmail(req.headers);
+    res.status(200).send(user);
   })
 
 

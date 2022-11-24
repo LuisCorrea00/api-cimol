@@ -5,6 +5,10 @@ alunoRouter.get('/', async(req, res, next)=>{
     aluno=await alunoController.get();
     res.status(200).send(aluno);
   })
+  alunoRouter.post('/', async(req, res, next)=>{
+    resp=await alunoController.post (req.headers, req.body);
+    res.status(200).send(resp);
+  })
 
 alunoRouter.get('/lista', async(req, res, next)=>{
   if(req.query.idCurso){

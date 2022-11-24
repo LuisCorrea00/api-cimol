@@ -17,7 +17,7 @@ cursoRouter.get('/', async(req, res, next)=>{
     res.status(200).send(curso);
   })
   
-cursoRouter.post('/', async(req, res, next)=>{
+  cursoRouter.post('/', async(req, res, next)=>{
     resp=await cursoController.post (req.headers, req.body);
     res.status(200).send(resp);
   })

@@ -28,7 +28,7 @@ login= async (data)=>{
          let curso=null;
          if(usuarios[0].id){
             const id=usuarios[0].id;
-            var token = jwt.sign({id} , 'CIMOL', {expiresIn:7200}); 
+            var token = jwt.sign({id} , 'CIMOL', {expiresIn:28800}); 
             console.log("Fez login e gerou token!");
             perfil=new Array();
             if(usuarios[0].aluno>0){

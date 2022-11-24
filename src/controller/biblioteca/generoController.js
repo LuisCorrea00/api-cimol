@@ -2,7 +2,7 @@ const userModel=require("../../model/userModel");
 const generoModel=require("../../model/biblioteca/generoModel");
 
 exports.post= async (headers, data)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth=await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=generoModel.post(data);
@@ -16,10 +16,25 @@ exports.post= async (headers, data)=>{
 }
 
 exports.get= async (headers)=>{
-  auth=userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
   if(auth.idUser){
     if(headers.iduser==auth.idUser){
       resp=await generoModel.get();
+    }else{ 
+      resp= {"status":"null", auth}
+    }
+  }else{
+    resp= {"status":"null", auth}
+  }
+  console.log(resp);
+  return resp;
+}
+
+exports.getByObraId = async (headers, obraId)=>{
+  auth= await userModel.verifyJWT(headers['x-access-token'], headers['perfil']);
+  if(auth.idUser){
+    if(headers.iduser==auth.idUser){
+      resp=await generoModel.getByObraId(obraId);
     }else{ 
       resp= {"status":"null", auth}
     }
