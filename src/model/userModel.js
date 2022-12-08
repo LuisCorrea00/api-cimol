@@ -41,7 +41,9 @@ login= async (data)=>{
                sql="SELECT * FROM curso c "+
                "JOIN coordenacao cc ON cc.curso_id_curso=c.id_curso "+
                "WHERE cc.professor_pessoa_id_pessoa="+usuarios[0].id;
+               console.log(sql);
                curso = await  mysql.query(sql);
+               console.log(curso);
                perfil.push("coordenador");
             }
             if(usuarios[0].biblioteca>0){
