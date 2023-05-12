@@ -13,8 +13,7 @@ const {
     DB_HOST,
     DB_USER,
     DB_USER_PASS,
-    DB_DATABASE
-  
+    DB_DATABASE  
   } = require ('./config');
 
 //====================== Rotas  =======================

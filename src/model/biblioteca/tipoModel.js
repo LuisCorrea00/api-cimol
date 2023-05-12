@@ -20,10 +20,7 @@ get = async() => {
 // }
 
 post = async (data) => {
-    sql = "INSERT INTO biblio_tipo" +
-        " (nome)" +
-        " VALUE" +
-        " ('" + data.nome + "')";
+    sql = `INSERT INTO biblio_tipo (nome) VALUES ("${data.nome}")`;
     const result = await mysql.query(sql);
     if (result) {
         resp = { "status": "OK", insertId: result.insertId, insertName: data.nome }

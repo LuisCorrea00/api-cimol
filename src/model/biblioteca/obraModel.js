@@ -13,18 +13,6 @@ getById = async (obraId) => {
 }
 
 getPreset = async () => {
-    return await mysql.query("SELECT o.id_obra, o.titulo, o.img, o.situacao, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_genero AS og ON o.id_obra = og.biblio_obra_id_obra LEFT JOIN biblio_genero AS g ON g.id_genero = og.biblio_genero_id_genero LEFT JOIN biblio_obra_autor AS oa ON o.id_obra = oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON a.id_autor = oa.biblio_autor_id_autor WHERE g.id_genero = (SELECT id_genero FROM biblio_genero LIMIT 1) GROUP BY (o.id_obra)");
-}
-
-getByGenero = async (generoId) => {
-    return await mysql.query("SELECT o.id_obra, o.titulo, o.img, o.situacao, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_genero AS og ON o.id_obra = og.biblio_obra_id_obra LEFT JOIN biblio_genero AS g ON g.id_genero = og.biblio_genero_id_genero LEFT JOIN biblio_obra_autor AS oa ON o.id_obra = oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON a.id_autor = oa.biblio_autor_id_autor WHERE g.id_genero =" + generoId + " GROUP BY (o.id_obra)");
-}
-
-getBySearch = async (search) => {
-    return await mysql.query(`SELECT o.id_obra, o.titulo, o.img, o.situacao, o.relevancia, a.nome AS autor FROM biblio_obra AS o LEFT JOIN biblio_obra_genero AS og ON o.id_obra = og.biblio_obra_id_obra LEFT JOIN biblio_genero AS g ON og.biblio_genero_id_genero = g.id_genero LEFT JOIN biblio_obra_autor AS oa ON o.id_obra = oa.biblio_obra_id_obra LEFT JOIN biblio_autor AS a ON oa.biblio_autor_id_autor = a.id_autor LEFT JOIN biblio_tipo AS t ON o.tipo_id_tipo = t.id_tipo LEFT JOIN biblio_editora AS e ON o.editora_id_editora = e.id_editora WHERE o.titulo LIKE "%${search}%" OR g.nome LIKE "%${search}%" OR a.nome LIKE "%${search}%" GROUP BY(o.id_obra)`);
-}
-
-getObraRetirada = async() => {
     return await mysql.query("SELECT o.titulo, o.id_obra, o.data_devolucao, p.nome, p.id_pessoa, t.nome AS turma, c.nome AS curso FROM biblio_obra o LEFT JOIN pessoa p ON p.id_pessoa = o.pessoa_id_pessoa LEFT JOIN turma_aluno ta ON o.pessoa_id_pessoa = ta.aluno_pessoa_id_pessoa LEFT JOIN turma t ON t.id_turma = ta.turma_id_turma LEFT JOIN aluno_curso ac ON ac.aluno_pessoa_id_pessoa = o.pessoa_id_pessoa LEFT JOIN curso c ON ac.curso_id_curso = c.id_curso WHERE o.situacao = 'indisponivel' GROUP BY(o.id_obra)");
 }
 // INSERT INTO `biblio_obra` (`id_obra`, `img`, `titulo`, `isbn`, `sinopse`,
@@ -176,4 +164,4 @@ del = async (data, obraId) => {
     return resp;
 }
 
-module.exports = { get, getById, post, put,  putStatus,putStatusDisp, del, getByGenero, getBySearch, getPreset, getEmail, getObraRetirada };
+module.exports = { get, getById, post, put,  putStatus,putStatusDisp, del, getPreset, getEmail};
