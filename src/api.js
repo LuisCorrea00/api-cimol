@@ -29,6 +29,8 @@ const bibliotecaRoute=require("./routers/biblioteca");
 const horarioRoute=require("./routers/horario");
 const curriculoRoute=require("./routers/curriculo");
 const patrimonioRoute=require("./routers/patrimonio");
+const salasRoute = require("./routers/salas")
+
 app.use('/', route);
 app.use('/user', userRoute);
 app.use('/curso', cursoRoute);
@@ -40,6 +42,7 @@ app.use('/biblioteca', bibliotecaRoute);
 app.use('/horario', horarioRoute);
 app.use('/aluno/curriculo', curriculoRoute);
 app.use('/curso/patrimonio',patrimonioRoute);
+app.use('/salas',salasRoute);
 
 module.exports=app;
 

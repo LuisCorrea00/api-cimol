@@ -7,6 +7,6 @@ module.exports = {
     DB_HOST:'http://localhost',
     DB_USER:'root',
     DB_USER_PASS:'',
-    DB_DATABASE:'cimol'
+    DB_DATABASE:'mydb'
     
   }

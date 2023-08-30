@@ -36,3 +36,8 @@ exports.getByProfessor = async(headers, idProfessor)=>{
     console.log(resp);
     return resp;
 }
+
+exports.getHorarios = async() =>{
+  resp = await horarioModel.getHorarios();
+  return resp;
+}
