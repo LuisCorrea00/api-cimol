@@ -17,6 +17,7 @@ exports.postSala = async()=>{
     salas.forEach((salaItem)=> {
         horario.forEach(async (horarioItem) => {
             if (horarioItem.Ambiente === salaItem.tipo && horarioItem.Tamanho <= salaItem.capacidade) {
+                console.log(horarioItem);
                 const data = {
                     'turma': horarioItem.Turma, 
                     'disc': horarioItem.Disciplina, 

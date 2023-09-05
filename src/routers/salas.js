@@ -7,16 +7,17 @@ salasRouter.get('/', async(req,res, next)=>{
     res.status(200).send(salas);
 })
 
-salasRouter.post('/grade', async(req,res,next)=>{
-    grade = await salasController.postSala();
+salasRouter.get('/grade', async(req,res,next)=>{
+    grade = await salasController.getGradeByDia(
+        req.query.dia,
+        req.query.turno
+    )
     res.status(200).send(grade);
 })
 
-salasRouter.get('/grade/dia/:dia/:turno', async(req,res,next)=>{
-    grade = await salasController.getGradeByDia(
-        req.params.dia,
-        req.params.turno
-    )
+salasRouter.post('/criar-grade', async(req,res,next)=>{
+    console.log(req);
+    grade = await salasController.postSala();
     res.status(200).send(grade);
 })
 

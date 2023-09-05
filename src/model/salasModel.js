@@ -1,9 +1,8 @@
-const { get } = require("../controller/patrimonioController");
 const mysql = require("./mysqlConnect");
 
 getSalas = async ()=>{
     return await mysql.query("SELECT sala.idsala, sala.predio, sala.nome, sala.capacidade, ambiente.tipo FROM sala" 
-    +" INNER JOIN ambiente on sala.ambiente_idambiente = ambiente.idambiente;");
+    +" INNER JOIN ambiente on sala.ambiente_idambiente = ambiente.idambiente order by idsala;");
 }
 
 getGradeByDia = async(dia,turno)=>{
@@ -28,7 +27,7 @@ getGradeByDia = async(dia,turno)=>{
 }
 
 postSala = async (data)=>{
-   console.log(data);
+//    console.log(data);
 //    sql = `UPDATE horario_disciplina_turma SET sala_idsala = ${data.idsala} WHERE disciplina_turma_turma_id_turma = ${data.turma} AND disciplina_turma_disciplina_id_disciplina = ${data.disc};`;
 //    const res = await mysql.query(sql);
 //    return res
