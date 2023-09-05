@@ -1,5 +1,5 @@
 const express = require('express');
-const salasController = require('../controller/SalasController');
+const salasController = require('../controller/salasController');
 const salasRouter = express.Router(); 
 
 salasRouter.get('/', async(req,res, next)=>{
@@ -8,10 +8,13 @@ salasRouter.get('/', async(req,res, next)=>{
 })
 
 salasRouter.get('/grade', async(req,res,next)=>{
-    grade = await salasController.getGradeByDia(
-        req.query.dia,
-        req.query.turno
-    )
+    console.log(req.query);
+    if (req.query.dia && req.query.turno) {
+        grade = await salasController.getGradeByDia(
+            req.query.dia,
+            req.query.turno
+        );
+    }else grade = await salasController.getGrade();
     res.status(200).send(grade);
 })
 

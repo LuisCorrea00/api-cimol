@@ -7,7 +7,7 @@ async function connect() {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'mydb',
+        database: 'cimol',
     });
     console.log('Conectou no MySQL!');
     global.connection = connection;
