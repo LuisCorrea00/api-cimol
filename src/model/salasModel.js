@@ -6,7 +6,7 @@ getSalas = async ()=>{
 }
 
 getGrade = async ()=>{
-    return await mysql.query(`select distinct S.predio AS Predio, S.nome AS Sala, DD.dia AS Dia, DD.dia_turno AS turno, H.hora AS Horario, D.nome AS Disciplina, T.nome_turma AS Turma from horario_disciplina_turma AS HDT
+    return await mysql.query(`select distinct S.predio AS Predio, S.nome AS Sala, DD.dia AS Dia, DD.dia_turno AS turno, H.hora AS Horario, D.nome AS Disciplina, T.nome AS Turma from horario_disciplina_turma AS HDT
     INNER JOIN 
 	    disciplina_turma AS DT ON HDT.disciplina_turma_turma_id_turma = DT.turma_id_turma
     INNER JOIN 
@@ -25,7 +25,7 @@ getGrade = async ()=>{
 }
 
 getGradeByDia = async(dia,turno)=>{
-    return await mysql.query(`select distinct S.predio AS Predio, S.nome AS Sala, DD.dia AS Dia, DD.dia_turno AS turno, H.hora AS Horario, D.nome AS Disciplina, T.nome_turma AS Turma from horario_disciplina_turma AS HDT
+    return await mysql.query(`select distinct S.predio AS Predio, S.nome AS Sala, DD.dia AS Dia, DD.dia_turno AS turno, H.hora AS Horario, D.nome AS Disciplina, T.nome AS Turma from horario_disciplina_turma AS HDT
     INNER JOIN 
 	    disciplina_turma AS DT ON HDT.disciplina_turma_turma_id_turma = DT.turma_id_turma
     INNER JOIN 
