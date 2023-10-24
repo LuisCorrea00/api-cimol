@@ -19,9 +19,13 @@ horarioRouter.get('/professor/:idProfessor', async (req, res, next) => {
 });
 
 horarioRouter.get('/', async (req, res, next) => {
-    const horario = await horarioController.getHorarios();
-    console.log(horario);
-    res.status(200).send(horario);
+    if (req.query.dia && req.query.turno) {
+        grade = await horarioController.getHorariosByDay(
+            req.query.dia,
+            req.query.turno
+        );
+    } else grade = await horarioController.getHorarios();
+    res.status(200).send(grade);
 });
 
 module.exports = horarioRouter;
