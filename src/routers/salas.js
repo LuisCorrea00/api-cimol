@@ -19,12 +19,12 @@ salasRouter.get('/grade', async (req, res, next) => {
 });
 
 salasRouter.post('/criar-grade', async (req, res, next) => {
-    grade = await salasController.postSala(req.query.dia, req.query.turno);
-    res.status(200).send(grade);
+    await salasController.postSala(req.query.dia, req.query.turno);
+    res.sendStatus(200);
 });
 
 salasRouter.post('/limpar', async (req, res, next) => {
-    limpar = await salasController.setLimpar();
+    await salasController.setLimpar();
     res.sendStatus(200);
 });
 
