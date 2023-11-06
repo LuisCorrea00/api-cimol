@@ -34,7 +34,7 @@ getByProfessor = async (idProfessor) => {
 
 getHorarios = async () => {
     return await mysql.query(
-        'SELECT DISTINCT DD.dia AS Dia, DD.dia_turno AS Turno, H.hora AS Horario, H.id_horario AS id_horario, D.nome AS Disciplina, D.id_disciplina AS id_disciplina, AMB.tipo AS Ambiente, P.nome AS Professor, T.nome AS Turma, T.id_turma AS id_turma, T.tamanho AS Tamanho' +
+        'SELECT DISTINCT DD.dia AS Dia, DD.dia_turno AS Turno, DD.id_dia AS id_dia, H.hora AS Horario, H.id_horario AS id_horario, D.nome AS Disciplina, D.id_disciplina AS id_disciplina, AMB.tipo AS Ambiente, P.nome AS Professor, T.nome AS Turma, T.id_turma AS id_turma, T.tamanho AS Tamanho' +
             ' FROM horario_disciplina_turma AS HDT' +
             ' INNER JOIN disciplina_turma AS DT ON HDT.disciplina_turma_turma_id_turma = DT.turma_id_turma' +
             ' INNER JOIN disciplina_turma AS DT2 ON HDT.disciplina_turma_disciplina_id_disciplina = DT2.disciplina_id_disciplina' +
@@ -51,7 +51,7 @@ getHorarios = async () => {
 };
 
 getHorariosByDay = async (dia, turno) => {
-    return await mysql.query(`SELECT DISTINCT DD.dia AS Dia, DD.dia_turno AS Turno, H.hora AS Horario, H.id_horario AS id_horario, D.nome AS Disciplina, D.id_disciplina AS id_disciplina, AMB.tipo AS Ambiente, P.nome AS Professor, T.nome AS Turma, T.id_turma AS id_turma, T.tamanho AS Tamanho
+    return await mysql.query(`SELECT DISTINCT DD.dia AS Dia, DD.dia_turno AS Turno, DD.id_dia AS id_dia, H.hora AS Horario, H.id_horario AS id_horario, D.nome AS Disciplina, D.id_disciplina AS id_disciplina, AMB.tipo AS Ambiente, P.nome AS Professor, T.nome AS Turma, T.id_turma AS id_turma, T.tamanho AS Tamanho
         FROM horario_disciplina_turma AS HDT
         INNER JOIN disciplina_turma AS DT ON HDT.disciplina_turma_turma_id_turma = DT.turma_id_turma
         INNER JOIN disciplina_turma AS DT2 ON HDT.disciplina_turma_disciplina_id_disciplina = DT2.disciplina_id_disciplina

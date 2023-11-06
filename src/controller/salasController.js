@@ -6,19 +6,15 @@ exports.getSalas = async () => {
     return resp;
 };
 
-exports.getGrade = async () => {
-    resp = await salasModel.getGrade();
-    return resp;
-};
-
-exports.getGradeByDia = async (dia, turno) => {
-    resp = await salasModel.getGradeByDia(dia, turno);
+exports.getGrade = async (dia, turno) => {
+    resp = await salasModel.getGrade(dia, turno);
     return resp;
 };
 
 exports.postSala = async (dia, turno) => {
     const horario = await horarioModel.getHorariosByDay(dia, turno);
     const salas = await salasModel.getSalas();
+
     let salaOcupada = new Set();
     let horarioAnterior = null;
     let salaAnterior = null;
@@ -61,7 +57,95 @@ exports.postSala = async (dia, turno) => {
     }
 };
 
-exports.setLimpar = async () => {
+exports.updateSala = async (body) => {
+    const horario = await horarioModel.getHorariosByDay(body.dia, body.turno);
+    const salas = await salasModel.getSalas();
+    const grade = await salasModel.getGrade(body.dia, body.turno);
+
+    const dia_id = horario[0].id_dia;
+    const predio = body.sala.slice(0, 1);
+    const salaNome = body.sala.slice(2, 6);
+    let sala_id = null;
+    let disc_id = null;
+    let turma_id = null;
+    let periodos = [];
+    let turmaOcupante = null;
+
+    salas.forEach((salaItem) => {
+        if (salaItem.predio == predio && salaItem.nome == salaNome) {
+            sala_id = salaItem.idsala;
+        }
+    });
+
+    horario.forEach((horarioItem) => {
+        if (
+            horarioItem.Disciplina == body.disc &&
+            horarioItem.Turma == body.turma
+        ) {
+            disc_id = horarioItem.id_disciplina;
+            turma_id = horarioItem.id_turma;
+            periodos.push(horarioItem.Horario);
+        }
+    });
+
+    const numPeriodos = periodos.length;
+
+    grade.forEach((gradeItem) => {
+        if (gradeItem.Predio == predio && gradeItem.Sala == salaNome) {
+            turmaOcupante = gradeItem.Turma;
+            for (i = 0; i < periodos.length; i++) {
+                if (gradeItem.Horario == periodos[i]) {
+                    periodos.shift();
+                }
+            }
+        }
+    });
+
+    if (periodos.length != numPeriodos) {
+        return `Sala ocupada por ${turmaOcupante}!`;
+    }
+    
+    const data = {
+        turma: turma_id,
+        disc: disc_id,
+        idsala: sala_id,
+        dia: dia_id,
+    };
+    await salasModel.updateSala(data);
+    return 'OK';
+};
+
+exports.setLimpar = async (body) => {
+    if (body.dia) {
+        const horario = await horarioModel.getHorariosByDay(
+            body.dia,
+            body.turno
+        );
+
+        const dia_id = horario[0].id_dia;
+        let disc_id = null;
+        let turma_id = null;
+
+        horario.forEach((horarioItem) => {
+            if (
+                horarioItem.Disciplina == body.disc &&
+                horarioItem.Turma == body.turma
+            ) {
+                disc_id = horarioItem.id_disciplina;
+                turma_id = horarioItem.id_turma;
+            }
+        });
+
+        const data = {
+            turma: turma_id,
+            disc: disc_id,
+            dia: dia_id,
+        };
+
+        await salasModel.setLimpar(data);
+        return;
+    }
+
     await salasModel.setLimpar();
     return;
 };

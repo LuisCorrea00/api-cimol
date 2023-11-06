@@ -8,13 +8,7 @@ salasRouter.get('/', async (req, res, next) => {
 });
 
 salasRouter.get('/grade', async (req, res, next) => {
-    console.log(req.query);
-    if (req.query.dia && req.query.turno) {
-        grade = await salasController.getGradeByDia(
-            req.query.dia,
-            req.query.turno
-        );
-    } else grade = await salasController.getGrade();
+    grade = await salasController.getGrade(req.query.dia, req.query.turno);
     res.status(200).send(grade);
 });
 
@@ -23,8 +17,13 @@ salasRouter.post('/criar-grade', async (req, res, next) => {
     res.sendStatus(200);
 });
 
+salasRouter.post('/update', async (req, res, next) => {
+    msg = await salasController.updateSala(req.body);
+    res.status(200).send(msg);
+});
+
 salasRouter.post('/limpar', async (req, res, next) => {
-    await salasController.setLimpar();
+    await salasController.setLimpar(req.body);
     res.sendStatus(200);
 });
 
