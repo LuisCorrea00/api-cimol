@@ -2,13 +2,11 @@ const salasModel = require('../model/salasModel');
 const horarioModel = require('../model/horarioModel');
 
 exports.getSalas = async () => {
-    resp = await salasModel.getSalas();
-    return resp;
+    return await salasModel.getSalas();
 };
 
 exports.getGrade = async (dia, turno) => {
-    resp = await salasModel.getGrade(dia, turno);
-    return resp;
+    return await salasModel.getGrade(dia, turno);
 };
 
 exports.postSala = async (dia, turno) => {
@@ -104,7 +102,7 @@ exports.updateSala = async (body) => {
     if (periodos.length != numPeriodos) {
         return `Sala ocupada por ${turmaOcupante}!`;
     }
-    
+
     const data = {
         turma: turma_id,
         disc: disc_id,

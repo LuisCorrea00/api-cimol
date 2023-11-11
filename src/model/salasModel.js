@@ -28,7 +28,7 @@ getGrade = async (dia, turno) => {
             ? `WHERE DD.dia = '${dia}' AND DD.dia_turno = '${turno}'`
             : ''
     }
-    ORDER BY DD.dia, T.nome, H.hora;`);
+    ORDER BY DD.id_dia, T.nome, H.hora;`);
 };
 
 postSala = async (data) => {
@@ -55,3 +55,5 @@ updateSala = async (data) => {
 };
 
 module.exports = { getSalas, getGrade, postSala, setLimpar, updateSala };
+
+

@@ -1,5 +1,7 @@
 const mysql = require('./mysqlConnect');
 const jwt = require('jsonwebtoken');
+
+
 get = async () => {
     //users=await mysql.query("SELECT *, (SELECT nome FROM pessoa WHERE id=u.pessoa_id_pessoa) as nome FROM usuario u");
     users = await mysql.query(
