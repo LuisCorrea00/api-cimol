@@ -4,9 +4,9 @@ module.exports = {
     KEY_TOKEN:'Q0lNT0w=',
 
     //Configuração basa de dados
-    DB_HOST:'http://localhost',
-    DB_USER:'root',
-    DB_USER_PASS:'',
-    DB_DATABASE:'mydb'
+    DB_HOST:'mysql27-farm10.kinghost.net',
+    DB_USER:'infocimol12',
+    DB_USER_PASS:'S1a2l3a4s5',
+    DB_DATABASE:'infocimol12'
     
   }
