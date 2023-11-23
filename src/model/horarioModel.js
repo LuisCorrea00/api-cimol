@@ -64,7 +64,7 @@ getHorariosByDay = async (dia, turno) => {
         INNER JOIN pessoa AS P ON PF.pessoa_id_pessoa = P.id_pessoa
         INNER JOIN turma AS T on HDT.disciplina_turma_turma_id_turma = T.id_turma
         WHERE DD.dia = '${dia}' AND DD.dia_turno = '${turno}'
-        ORDER BY DD.dia, T.tamanho desc, H.hora;`);
+        ORDER BY DD.dia, T.tamanho desc, T.nome, H.hora;`);
 };
 
 module.exports = { getByTurma, getByProfessor, getHorarios, getHorariosByDay };
